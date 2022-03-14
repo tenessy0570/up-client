@@ -1,0 +1,21 @@
+{
+    "name": "tenessy0570/up-client",
+    "description": "my-php-project",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tenessy0570"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4 | ^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Src\\": "core/Src/",
+            "": "app/"
+        }
+    }
+}
