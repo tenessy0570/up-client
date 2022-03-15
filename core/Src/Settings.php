@@ -30,4 +30,8 @@ class Settings
     {
         return '/' . $this->path['views'] ?? '';
     }
+
+    public function getDbSettings(): array {
+        return $this->db ?? [];
+    }
 }
