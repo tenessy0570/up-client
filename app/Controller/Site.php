@@ -21,7 +21,7 @@ class Site
         return new View('site.hello', ['message' => 'hello working']);
     }
 
-    public function signup(Request $request)
+    public function signup(Request $request): string
     {
         if ($request->method === "POST" && User::create($request->all())) {
             app()->route->redirect('/hello');
