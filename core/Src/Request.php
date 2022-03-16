@@ -9,12 +9,14 @@ class Request
     protected array $body;
     public string $method;
     public array $headers;
+    public array $post;
 
     public function __construct()
     {
         $this->body = $_REQUEST;
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->headers = getallheaders() ?? [];
+        $this->post = $_POST;
     }
 
     public function all(): array

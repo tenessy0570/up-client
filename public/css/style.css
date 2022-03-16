@@ -1,0 +1,38 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.form button, .form input{
+    display: block;
+    width: 20%;
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.form select {
+    display: block;
+    width: 21vw;
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.form label {
+    margin-top: 4px;
+}
+
+.form input, .form select, .form button {
+    border-radius: 10px;
+    border: 1px solid black
+}
+
+.form button {
+    border: 3px solid rgb(111, 231, 240);
+    width: 14vw;
+    background-color: rgb(198, 246, 255);
+}
+
