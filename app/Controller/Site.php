@@ -82,7 +82,7 @@ class Site
                 ->y;
             array_push($agesArray, $age);
         }
-        $averageAge = $averageAge . array_sum($agesArray) / count($agesArray);
+        $averageAge = $averageAge . (string)ceil(array_sum($agesArray) / count($agesArray));
         return (new View)->render('site.hello', ['age' => $averageAge]);
     }
     
