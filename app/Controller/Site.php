@@ -103,11 +103,11 @@ class Site
         // Получаем список всех сотрудников с каждого штата, добавляя его в $staff
         $staff = [];
         foreach ($states as $state) {
-            $user = User::where('state', $state->id)->first();
-            array_push($staff, $user);
+            $users = User::where('state', $state->id)->get();
+            foreach ($users as $user) array_push($staff, $user);
         }
 
-        // Меняем id Штата у каждого сотрудника на название этого штата
+        // Меняем id Штата у каждого сотрудника в массиве на название этого штата
         for ($i = 0; $i < count($staff); $i += 1) {
             $workerState = State::where('id', $staff[$i]->state)->first();
             $staff[$i]->state_name = $workerState->name;

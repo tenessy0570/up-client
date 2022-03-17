@@ -3,8 +3,8 @@
    <div class="form">
       <h1>Регистрация</h1>
       <input type="text" name="login" placeholder="Логин" required>
-      <input type="text" name="password" placeholder="Пароль" required>
-      <input type="text" name="password2" placeholder="Повтор пароля" required>
+      <input type="password" name="password" placeholder="Пароль" required>
+      <input type="password" name="password2" placeholder="Повтор пароля" required>
       <input type="text" name="first_name" placeholder="Имя" required>
       <input type="text" name="last_name" placeholder="Фамилия" required>
       <input type="text" name="middle_name" placeholder="Отчество" required>
