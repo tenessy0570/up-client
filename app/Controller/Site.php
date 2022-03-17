@@ -10,6 +10,7 @@ use Src\Request;
 use Model\Post;
 use Model\User;
 use Model\State;
+use Model\Division;
 use Illuminate\Database\QueryException;
 
 class Site
@@ -83,5 +84,35 @@ class Site
         }
         $averageAge = $averageAge . array_sum($agesArray) / count($agesArray);
         return (new View)->render('site.hello', ['age' => $averageAge]);
+    }
+    
+    public function getDivisionStaff(Request $request): string
+    {
+        $divisions = Division::all();
+
+        if ($request->method === 'GET') {
+            return new View('site.division_staff', ['divisions' => $divisions]);
+        }
+        
+        // Получаем все штаты выбранного подразделения
+        $divisionId = $request->post['division'];
+        if ($divisionId === 'fake') return new View('site.division_staff', ['divisions' => $divisions]);
+
+        $states = State::where('division', $divisionId)->get();
+        
+        // Получаем список всех сотрудников с каждого штата, добавляя его в $staff
+        $staff = [];
+        foreach ($states as $state) {
+            $user = User::where('state', $state->id)->first();
+            array_push($staff, $user);
+        }
+
+        // Меняем id Штата у каждого сотрудника на название этого штата
+        for ($i = 0; $i < count($staff); $i += 1) {
+            $workerState = State::where('id', $staff[$i]->state)->first();
+            $staff[$i]->state_name = $workerState->name;
+        }
+
+        return (new View)->render('site.division_staff', ['divisions' => $divisions, 'staff' => $staff]);
     }
 }

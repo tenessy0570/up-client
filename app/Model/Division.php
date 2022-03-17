@@ -2,14 +2,14 @@
 
 namespace Model;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class State extends Model{
+class Division extends Model {
     use HasFactory;
-    
-    protected $table = 'states';
+    public $timestamps = false;
     protected $fillable = [
-        'name'
+        'name',
+        'type'
     ];
 }

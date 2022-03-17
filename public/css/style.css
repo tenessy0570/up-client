@@ -42,7 +42,7 @@ header nav {
     align-items: center;
 }
 
-header a, .get-average-age a {
+header a, .get-average-age a, a.get-division-staff {
     text-align: center;
     display: inline-block;
     border: 3px solid rgb(111, 231, 240);
@@ -76,3 +76,46 @@ header > nav > .logout > span, .get-average-age span {
     margin: 0 10px;
 }
 
+div.division-staff-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.division-staff-wrapper form {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    text-align: center;
+    
+}
+
+.division-staff-wrapper form > * {
+    margin: 6px 0;
+}
+
+.division-staff-wrapper form select, .division-staff-wrapper input[type='submit'] {
+    display: block;
+    padding: 6px 7px;
+    font-size: 1.2em;
+    color: rgba(52, 126, 126, 0.699);
+    border: 2px solid rgba(70, 173, 173, 0.699);
+    border-radius: 9px;
+}
+
+.division-staff-wrapper input[type='submit'] {
+    color: black;
+    background-color: rgb(202, 255, 255);
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+table, tr, td {
+    padding: 5px;
+    border: 3px solid rgba(150, 197, 197, 0.699);
+    font-size: 1.1em;
+}
