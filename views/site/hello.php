@@ -4,4 +4,5 @@
 </div>
 
 
-<a class='get-division-staff' href="<?= app()->route->getUrl('/getDivisionStaff') ?>">Показать список сотрудников по подразделению</a>
+<a class='get-staff' href="<?= app()->route->getUrl('/getDivisionStaff') ?>">Показать список сотрудников по подразделению</a> <br>
+<a class='get-staff' href="<?= app()->route->getUrl('/getStateStaff') ?>">Показать список сотрудников по штату</a>

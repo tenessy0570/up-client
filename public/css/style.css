@@ -42,7 +42,7 @@ header nav {
     align-items: center;
 }
 
-header a, .get-average-age a, a.get-division-staff {
+header a, .get-average-age a, a.get-staff {
     text-align: center;
     display: inline-block;
     border: 3px solid rgb(111, 231, 240);
@@ -53,7 +53,7 @@ header a, .get-average-age a, a.get-division-staff {
     border-radius: 10px;
     text-decoration: none;
     font-size: 1.2em;
-    color: hsl(180, 100%, 24%);
+    color: black;
 }
 
 header > nav > .logout > span, .get-average-age span {
@@ -76,12 +76,12 @@ header > nav > .logout > span, .get-average-age span {
     margin: 0 10px;
 }
 
-div.division-staff-wrapper {
+div.staff-wrapper {
     display: flex;
     justify-content: space-around;
 }
 
-.division-staff-wrapper form {
+.staff-wrapper form {
     margin: 15px 0;
     display: flex;
     flex-direction: column;
@@ -90,11 +90,11 @@ div.division-staff-wrapper {
     
 }
 
-.division-staff-wrapper form > * {
+.staff-wrapper form > * {
     margin: 6px 0;
 }
 
-.division-staff-wrapper form select, .division-staff-wrapper input[type='submit'] {
+.staff-wrapper form select, .staff-wrapper input[type='submit'] {
     display: block;
     padding: 6px 7px;
     font-size: 1.2em;
@@ -103,7 +103,7 @@ div.division-staff-wrapper {
     border-radius: 9px;
 }
 
-.division-staff-wrapper input[type='submit'] {
+.staff-wrapper input[type='submit'] {
     color: black;
     background-color: rgb(202, 255, 255);
     cursor: pointer;

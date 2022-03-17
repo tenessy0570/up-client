@@ -115,4 +115,21 @@ class Site
 
         return (new View)->render('site.division_staff', ['divisions' => $divisions, 'staff' => $staff]);
     }
+
+    public function getStateStaff(Request $request): string
+    {
+        $states = State::all();
+
+        if ($request->method === 'GET') {
+            return new View('site.state_staff', ['states' => $states]);
+        }
+
+        $stateId = $request->post['state'];
+        if ($stateId === 'fake') return new View('site.state_staff', ['states' => $states]);
+
+        $state = State::where('id', $stateId)->first();
+        $staff = User::where('state', $state->id)->get();
+
+        return (new View)->render('site.state_staff', ['states' => $states, 'staff' => $staff]);
+    }
 }

@@ -1,11 +1,10 @@
-
 <div class="staff-wrapper">
 <form method="POST">
-    <select name="division" id="" required> 
-        <option value="fake">Подразделение</option> <?php
+    <select name="state" id="" required> 
+        <option value="fake">Штат</option> <?php
 
-        foreach($divisions as $division) { ?>
-            <option value="<?= $division->id ?>"><?= $division->name ?></option> <?php
+        foreach($states as $state) { ?>
+            <option value="<?= $state->id ?>"><?= $state->name ?></option> <?php
         } ?>
         
     </select>
@@ -14,7 +13,6 @@
         <tr>
             <td>Имя</td>
             <td>Фамилия</td>
-            <td>Штат</td>
             <td>Должность</td>
         </tr> <?php
         if (isset($staff)) {
@@ -22,7 +20,6 @@
                 <tr>
                     <td><?= $worker->first_name ?></td>
                     <td><?= $worker->last_name ?></td>
-                    <td><?= $worker->state_name ?></td>
                     <td><?= $worker->post ?></td>
                 </tr> <?php
             } 
