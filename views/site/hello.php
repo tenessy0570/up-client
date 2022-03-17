@@ -22,7 +22,7 @@ if ($isAdmin) { ?>
         <div class="admin-actions">
             <a href="<?= app()->route->getUrl('/deleteUser') ?>" class="add-new">Удалить пользователя</a>
             <a href="<?= app()->route->getUrl('/deleteState') ?>" class="add-new">Удалить штат</a>
-            <a href="" class="add-new">Удалить подразделение</a>
+            <a href="<?= app()->route->getUrl('/deleteDivision') ?>" class="add-new">Удалить подразделение</a>
         </div>
     </div>
 

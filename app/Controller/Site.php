@@ -149,7 +149,7 @@ class Site
 
         try {
             if (User::create($request->all())) {
-                app()->route->redirect('/hello');
+                return (new View)->render('site.create_new_user', ['states' => $states, 'error' => 'Успешно создан юзер с логином ' . $post['login']]);
             }
         } catch (QueryException $e) {
             return new View('site.create_new_user', ['error' => 'Логин занят.', 'states' => $states]);
@@ -262,6 +262,24 @@ class Site
         if ($state->delete()) {
             $states = State::all();
             return $view->render('site.delete_state', ['states' => $states, 'message' => 'Удалён успешно']);
+        }
+    }
+
+    public function deleteDivision(Request $request): string
+    {
+        $divisions = Division::all();
+        $view = new View();
+        if ($request->method === 'GET') return $view->render('site.delete_division', ['divisions' => $divisions]);
+
+        $post = $request->post;
+
+        if($post['id'] === 'fake') return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Выберите подразделение']);
+
+        $division = Division::where('id', $post['id'])->first();
+
+        if ($division->delete()) {
+            $divisions = Division::all();
+            return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Удалён успешно']);
         }
     }
 }
