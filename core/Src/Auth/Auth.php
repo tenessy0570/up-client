@@ -42,6 +42,12 @@ class Auth
         return self::$user->findIdentity($id);
     }
 
+    public static function isAdmin(): bool {
+        $id = Session::get('id') ?? 0;
+        $user = self::$user->findIdentity($id);
+        return $user->role === 'admin';
+    }
+
     //Проверка является ли текущий пользователь аутентифицированным
     public static function check(): bool
     {
