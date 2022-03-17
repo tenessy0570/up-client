@@ -8,6 +8,8 @@
 <a class='get-staff' href="<?= app()->route->getUrl('/getStateStaff') ?>">Показать список сотрудников по штату</a>
 
 <?php
+$isAdmin = $isAdmin ?? false;
+
 if ($isAdmin) { ?>
     <hr>
     <h2>Действия администратора</h2>

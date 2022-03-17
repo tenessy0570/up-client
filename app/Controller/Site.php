@@ -85,7 +85,7 @@ class Site
             array_push($agesArray, $age);
         }
         $averageAge = $averageAge . (string)ceil(array_sum($agesArray) / count($agesArray));
-        return (new View)->render('site.hello', ['age' => $averageAge]);
+        return (new View)->render('site.hello', ['age' => $averageAge, 'isAdmin' => Auth::isAdmin()]);
     }
 
     public function getDivisionStaff(Request $request): string
