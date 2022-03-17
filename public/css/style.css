@@ -42,7 +42,7 @@ header nav {
     align-items: center;
 }
 
-header a, .get-average-age a, a.get-staff {
+header a, .get-average-age a, a.get-staff, a.add-new {
     text-align: center;
     display: inline-block;
     border: 3px solid rgb(111, 231, 240);
@@ -118,4 +118,10 @@ table, tr, td {
     padding: 5px;
     border: 3px solid rgba(150, 197, 197, 0.699);
     font-size: 1.1em;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

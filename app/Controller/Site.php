@@ -11,6 +11,7 @@ use Model\Post;
 use Model\User;
 use Model\State;
 use Model\Division;
+use Model\Company;
 use Illuminate\Database\QueryException;
 
 class Site
@@ -85,7 +86,7 @@ class Site
         $averageAge = $averageAge . (string)ceil(array_sum($agesArray) / count($agesArray));
         return (new View)->render('site.hello', ['age' => $averageAge]);
     }
-    
+
     public function getDivisionStaff(Request $request): string
     {
         $divisions = Division::all();
@@ -93,13 +94,13 @@ class Site
         if ($request->method === 'GET') {
             return new View('site.division_staff', ['divisions' => $divisions]);
         }
-        
+
         // Получаем все штаты выбранного подразделения
         $divisionId = $request->post['division'];
         if ($divisionId === 'fake') return new View('site.division_staff', ['divisions' => $divisions]);
 
         $states = State::where('division', $divisionId)->get();
-        
+
         // Получаем список всех сотрудников с каждого штата, добавляя его в $staff
         $staff = [];
         foreach ($states as $state) {
@@ -131,5 +132,85 @@ class Site
         $staff = User::where('state', $state->id)->get();
 
         return (new View)->render('site.state_staff', ['states' => $states, 'staff' => $staff]);
+    }
+
+    public function createNewUser(Request $request): string
+    {
+        $states = State::all();
+        if ($request->method === "GET") return (new View)->render('site.create_new_user', ['states' => $states]);
+        $error = '';
+        $post = $request->post;
+        $states = State::all();
+
+        if ($post['state'] === 'fake') $error = $error . 'Выберите штат <br>';
+        if ($post['gender'] === 'fake') $error = $error . 'Выберите пол <br>';
+
+        if (!empty($error)) return new View('site.create_new_user', ['error' => $error, 'states' => $states]);
+
+        try {
+            if (User::create($request->all())) {
+                app()->route->redirect('/hello');
+            }
+        } catch (QueryException $e) {
+            return new View('site.create_new_user', ['error' => 'Логин занят.', 'states' => $states]);
+        }
+    }
+
+    public function createNewState(Request $request): string {
+        $divisions = Division::all();
+        if ($request->method === "GET") return (new View)->render('site.create_new_state', ['divisions' => $divisions]);
+        
+        $post = $request->post;
+        $error = '';
+        
+        $divisionId = $post['division'];
+        $allDivisionStates = State::where('division', $divisionId)->get();
+
+        if ($post['division'] === 'fake') $error = $error . 'Выберите подразделение';
+
+        if (!empty($error)) return new View('site.create_new_state', ['error' => $error, 'divisions' => $divisions]);
+
+        foreach ($allDivisionStates as $state) {
+            if ($state->name === $post['name']) {
+                $error = $error . "В подразделении уже есть штат с таким названием";
+                break;
+            }
+        }
+        
+        if (!empty($error)) return new View('site.create_new_state', ['error' => $error, 'divisions' => $divisions]);
+
+        if (State::create($request->all())) {
+            return (new View)->render('site.create_new_state', ['error' => 'Штат успешно создан']);
+        }
+        
+        return (new View)->render('site.create_new_state', ['error' => 'Произошла ошибка']);
+    }
+
+    public function createNewDivision(Request $request)
+    {
+        $companies = Company::all();
+        $view = new View();
+        if ($request->method === 'GET') return $view->render('site.create_new_division', ['companies' => $companies]);
+
+        $error = '';
+        $post = $request->post;
+
+        if ($post['company'] === 'fake') $error = $error . 'Выберите компанию <br>';
+        
+        if (!empty($error)) return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
+
+        $divisionsWithSameName = Division::where(['name' => $post['name'], 'company' => $post['company']])->get();
+        foreach ($divisionsWithSameName as $division) {
+            if ($division->type === $post['type']) {
+                $error = $error . 'Подразделение такого типа уже существует в компании';
+                return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
+            }
+        }
+        
+        if (Division::create($request->all())) {
+            return $view->render('site.create_new_division', ['companies' => $companies, 'error' => 'Успешно создано']);
+        } else {
+            // handle error
+        }
     }
 }
