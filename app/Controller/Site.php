@@ -77,6 +77,7 @@ class Site
         $agesArray = [];
         $averageAge = 'Средний возраст, лет: ';
         foreach ($users as $user) {
+            if ($user->role === 'admin') continue;
             $age = DateTime::createFromFormat('d/m/Y', date('d/m/Y', strtotime($user->birth_date)))
                 ->diff(new DateTime('now'))
                 ->y;
@@ -243,6 +244,24 @@ class Site
                 }
             }
             return $view->render('site.delete_user', ['users' => $users, 'message' => 'Удалён успешно']);
+        }
+    }
+
+    public function deleteState(Request $request): string
+    {
+        $states = State::all();
+        $view = new View();
+        if ($request->method === 'GET') return $view->render('site.delete_state', ['states' => $states]);
+
+        $post = $request->post;
+
+        if($post['id'] === 'fake') return $view->render('site.delete_state', ['states' => $states, 'message' => 'Выберите штат']);
+
+        $state = State::where('id', $post['id'])->first();
+
+        if ($state->delete()) {
+            $states = State::all();
+            return $view->render('site.delete_state', ['states' => $states, 'message' => 'Удалён успешно']);
         }
     }
 }

@@ -1,14 +1,15 @@
 <div class="staff-wrapper">
 <form method="POST">
-    <select name="login" id="" required> 
-        <option value="fake">Логин пользователя</option> <?php
+    <select name="id" id="" required> 
+        <option value="fake">Название штата</option> <?php
 
-        foreach($users as $user) { ?>
-            <option value="<?= $user->id ?>"><?= $user->login ?></option> <?php
+        foreach($states as $state) { ?>
+            <option value="<?= $state->id ?>"><?= $state->name ?></option> <?php
         } ?>
         
     </select>
     <input type="submit" value="Удалить">
+    <p><?= $message ?? '' ?></p>
 </form>
     
 </div>

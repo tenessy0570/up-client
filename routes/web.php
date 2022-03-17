@@ -21,3 +21,4 @@ Route::add(['GET', 'POST'], '/createNewUser', [Controller\Site::class, 'createNe
 Route::add(['GET', 'POST'], '/createNewState', [Site::class, 'createnewState']);
 Route::add(['GET', 'POST'], '/createNewDivision', [Site::class, 'createNewDivision']);
 Route::add(['GET', 'POST'], '/deleteUser', [Site::class, 'deleteUser']);
+Route::add(['GET', 'POST'], '/deleteState', [Site::class, 'deleteState']);
