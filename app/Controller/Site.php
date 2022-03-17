@@ -3,7 +3,6 @@
 namespace Controller;
 
 use DateTime;
-use DateTimeZone;
 use Src\View;
 use Src\Auth\Auth;
 use Src\Request;
@@ -211,6 +210,39 @@ class Site
             return $view->render('site.create_new_division', ['companies' => $companies, 'error' => 'Успешно создано']);
         } else {
             // handle error
+        }
+    }
+
+    public function deleteUser(Request $request): string
+    {
+        $users = User::all();
+
+        // Убираем свой аккаунт из списка пользователей 
+        for ($i = 0; $i < count($users); $i += 1) {
+            if ($users[$i]->id == $_SESSION['id']) {
+                unset($users[$i]);
+                break;
+            }
+        }
+
+        $view = new View();
+        if ($request->method === 'GET') return $view->render('site.delete_user', ['users' => $users]);
+
+        $post = $request->post;
+
+        if($post['id'] === 'fake') return $view->render('site.delete_user', ['users' => $users, 'message' => 'Выберите пользователя']);
+
+        $user = User::where('id', $post['id'])->first();
+
+        if ($user->delete()) {
+            $users = User::all();
+            for ($i = 0; $i < count($users); $i += 1) {
+                if ($users[$i]->id == $_SESSION['id']) {
+                    unset($users[$i]);
+                    break;
+                }
+            }
+            return $view->render('site.delete_user', ['users' => $users, 'message' => 'Удалён успешно']);
         }
     }
 }

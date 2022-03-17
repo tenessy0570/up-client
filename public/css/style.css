@@ -124,4 +124,9 @@ table, tr, td {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0 10px;
+}
+
+.admin-actions-wrapper {
+    display: flex;
 }
