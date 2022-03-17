@@ -1,4 +1,3 @@
-<h2>Регистрация нового пользователя</h2>
 <h3><?= $message ?? ''; ?></h3>
 <form method="post">
    <div class="form">

@@ -73,7 +73,6 @@ class Site
     public function getAverageAge(): string
     {
         $users = User::all();
-        $age = 1;
         $agesArray = [];
         $averageAge = 'Средний возраст, лет: ';
         foreach ($users as $user) {

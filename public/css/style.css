@@ -36,3 +36,43 @@
     background-color: rgb(198, 246, 255);
 }
 
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header a, .get-average-age a {
+    text-align: center;
+    display: inline-block;
+    border: 3px solid rgb(111, 231, 240);
+    width: 14vw;
+    background-color: rgb(198, 246, 255);
+    margin: 5px 0;
+    padding: 6px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1.2em;
+    color: hsl(180, 100%, 24%);
+}
+
+header > nav > .logout > span, .get-average-age span {
+    text-align: center;
+    display: inline-block;
+    border: 5px double rgb(111, 231, 240);
+    width: 14vw;
+    margin: 5px 0;
+    padding: 6px;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.get-average-age {
+    display: flex;
+    align-items: center;
+}
+
+.get-average-age span{
+    margin: 0 10px;
+}
+
