@@ -7,7 +7,7 @@ use Src\Validator\AbstractValidator;
 class LoginValidator extends AbstractValidator
 {
 
-    protected string $message = 'Логин должен состоять из не менее чем 5 символов и иметь хотя бы одно число в строки';
+    protected string $message = 'Логин должен состоять из не менее чем 5 символов и иметь хотя бы одно число в конце';
 
     public function rule(): bool
     {

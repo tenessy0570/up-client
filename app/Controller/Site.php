@@ -46,8 +46,8 @@ class Site
                 'post' => ['required'],
                 'birth_date' => ['required'],
                 'home_address' => ['required'],
-                'state' => ['select'],
-                'gender' => ['select'],
+                'state' => ['select', 'required'],
+                'gender' => ['select', 'required'],
             ], [
                 'required' => 'Поле :field пусто',
                 'unique' => 'Поле :field должно быть уникально'
@@ -162,7 +162,8 @@ class Site
         $states = State::all();
 
         $validator = new Validator($request->all(), [
-            'login' => ['unique:users,login']
+            'login' => ['unique:users,login'],
+            'state' => ['select', 'required']
         ], [
             'unique' => 'Поле :field должно быть уникально'
         ]);
@@ -194,7 +195,7 @@ class Site
 
         $validator = new Validator($request->all(), [
             'name' => ['required'],
-            'division' => ['select']
+            'division' => ['select', 'required']
         ], [
             'required' => 'Поле :field обязательно'
         ]);
@@ -236,7 +237,7 @@ class Site
 
         $validator = new Validator($request->all(), [
             'name' => ['required'],
-            'company' => ['select']
+            'company' => ['select', 'required']
         ], [
             'required' => 'Поле :field обязательно'
         ]);
