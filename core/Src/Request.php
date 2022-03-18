@@ -10,11 +10,13 @@ class Request
     public string $method;
     public array $headers;
     public array $post;
+    public string $url;
 
     public function __construct()
     {
         $this->body = $_REQUEST;
         $this->method = $_SERVER['REQUEST_METHOD'];
+        $this->url = $_SERVER['REQUEST_URI'];
         $this->headers = getallheaders() ?? [];
         $this->post = $_POST;
     }

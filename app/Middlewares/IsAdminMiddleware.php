@@ -9,6 +9,7 @@ class IsAdminMiddleware
 {
     public function handle(Request $request)
     {
+        // Перенаправляет на главную страницу, если не админ пытается выполнить админское действие
         $isAdmin = Auth::isAdmin();
         $urlsForAdmin = [
             '/createNewUser',
@@ -18,7 +19,7 @@ class IsAdminMiddleware
             '/deleteState',
             '/deleteDivision'
         ];
-        $url = $_SERVER['REQUEST_URI'];
+        $url = $request->url;
 
         if (in_array($url, $urlsForAdmin)) {
             if (!$isAdmin) {

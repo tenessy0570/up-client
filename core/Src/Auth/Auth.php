@@ -44,8 +44,8 @@ class Auth
 
     public static function isAdmin(): bool {
         $id = Session::get('id') ?? 0;
-        $user = self::$user->findIdentity($id);
-        return $user->role === 'admin';
+        $currentUser = self::$user->findIdentity($id);
+        return $currentUser->role === 'admin';
     }
 
     //Проверка является ли текущий пользователь аутентифицированным
