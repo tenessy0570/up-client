@@ -20,18 +20,23 @@ Route::add(["GET", "POST"], '/getStateStaff', [Controller\Site::class, 'getState
 Route::add(['GET', 'POST'], '/createNewUser', [Controller\Site::class, 'createNewUser'])
     ->middleware('isadmin')
     ->setPrefix('admin');
+
 Route::add(['GET', 'POST'], '/createNewState', [Site::class, 'createnewState'])
     ->middleware('isadmin')
     ->setPrefix('admin');
+
 Route::add(['GET', 'POST'], '/createNewDivision', [Site::class, 'createNewDivision'])
     ->middleware('isadmin')
     ->setPrefix('admin');
+
 Route::add(['GET', 'POST'], '/deleteUser', [Site::class, 'deleteUser'])
     ->middleware('isadmin')
     ->setPrefix('admin');
+
 Route::add(['GET', 'POST'], '/deleteState', [Site::class, 'deleteState'])
     ->middleware('isadmin')
     ->setPrefix('admin');
+
 Route::add(['GET', 'POST'], '/deleteDivision', [Site::class, 'deleteDivision'])
     ->middleware('isadmin')
     ->setPrefix('admin');
