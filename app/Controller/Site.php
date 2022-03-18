@@ -12,6 +12,8 @@ use Model\State;
 use Model\Division;
 use Model\Company;
 use Illuminate\Database\QueryException;
+use Src\Validator\Validator;
+
 
 class Site
 {
@@ -34,18 +36,36 @@ class Site
             $post = $request->post;
             $states = State::all();
 
+            $validator = new Validator($request->all(), [
+                'first_name' => ['required'],
+                'login' => ['required', 'unique:users,login'],
+                'password' => ['required'],
+                'last_name' => ['required'],
+                'middle_name' => ['required'],
+                'post' => ['required'],
+                'birth_date' => ['required'],
+                'home_address' => ['required']
+            ], [
+                'required' => 'Поле :field пусто',
+                'unique' => 'Поле :field должно быть уникально'
+            ]);
+
+            if ($validator->fails()) {
+                return new View(
+                    'site.signup',
+                    ['error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]
+                );
+            }
+
+
             if ($post['password'] !== $post['password2']) $error = $error . 'Пароли не совпадают <br>';
             if ($post['state'] === 'fake') $error = $error . 'Выберите штат <br>';
             if ($post['gender'] === 'fake') $error = $error . 'Выберите пол <br>';
 
             if (!empty($error)) return new View('site.signup', ['error' => $error, 'states' => $states]);
 
-            try {
-                if (User::create($request->all())) {
-                    app()->route->redirect('/hello');
-                }
-            } catch (QueryException $e) {
-                return new View('site.signup', ['error' => 'Логин занят.', 'states' => $states]);
+            if (User::create($request->all())) {
+                app()->route->redirect('/hello');
             }
         }
 
@@ -157,13 +177,14 @@ class Site
         }
     }
 
-    public function createNewState(Request $request): string {
+    public function createNewState(Request $request): string
+    {
         $divisions = Division::all();
         if ($request->method === "GET") return (new View)->render('site.create_new_state', ['divisions' => $divisions]);
-        
+
         $post = $request->post;
         $error = '';
-        
+
         $divisionId = $post['division'];
         $allDivisionStates = State::where('division', $divisionId)->get();
 
@@ -177,13 +198,13 @@ class Site
                 break;
             }
         }
-        
+
         if (!empty($error)) return new View('site.create_new_state', ['error' => $error, 'divisions' => $divisions]);
 
         if (State::create($request->all())) {
             return (new View)->render('site.create_new_state', ['error' => 'Штат успешно создан']);
         }
-        
+
         return (new View)->render('site.create_new_state', ['error' => 'Произошла ошибка']);
     }
 
@@ -197,7 +218,7 @@ class Site
         $post = $request->post;
 
         if ($post['company'] === 'fake') $error = $error . 'Выберите компанию <br>';
-        
+
         if (!empty($error)) return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
 
         $divisionsWithSameName = Division::where(['name' => $post['name'], 'company' => $post['company']])->get();
@@ -207,7 +228,7 @@ class Site
                 return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
             }
         }
-        
+
         if (Division::create($request->all())) {
             return $view->render('site.create_new_division', ['companies' => $companies, 'error' => 'Успешно создано']);
         } else {
@@ -232,7 +253,7 @@ class Site
 
         $post = $request->post;
 
-        if($post['id'] === 'fake') return $view->render('site.delete_user', ['users' => $users, 'message' => 'Выберите пользователя']);
+        if ($post['id'] === 'fake') return $view->render('site.delete_user', ['users' => $users, 'message' => 'Выберите пользователя']);
 
         $user = User::where('id', $post['id'])->first();
 
@@ -256,7 +277,7 @@ class Site
 
         $post = $request->post;
 
-        if($post['id'] === 'fake') return $view->render('site.delete_state', ['states' => $states, 'message' => 'Выберите штат']);
+        if ($post['id'] === 'fake') return $view->render('site.delete_state', ['states' => $states, 'message' => 'Выберите штат']);
 
         $state = State::where('id', $post['id'])->first();
 
@@ -274,7 +295,7 @@ class Site
 
         $post = $request->post;
 
-        if($post['id'] === 'fake') return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Выберите подразделение']);
+        if ($post['id'] === 'fake') return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Выберите подразделение']);
 
         $division = Division::where('id', $post['id'])->first();
 
