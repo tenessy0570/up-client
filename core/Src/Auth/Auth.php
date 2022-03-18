@@ -42,7 +42,8 @@ class Auth
         return self::$user->findIdentity($id);
     }
 
-    public static function isAdmin(): bool {
+    public static function isAdmin(): bool
+    {
         $id = Session::get('id') ?? 0;
         $currentUser = self::$user->findIdentity($id);
         return $currentUser->role === 'admin';
@@ -62,5 +63,12 @@ class Auth
     {
         Session::clear('id');
         return true;
+    }
+
+    public static function generateCSRF(): string
+    {
+        $token = md5(time());
+        Session::set('csrf_token', $token);
+        return $token;
     }
 }

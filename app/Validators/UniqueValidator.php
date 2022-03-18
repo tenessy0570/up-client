@@ -8,7 +8,7 @@ use Src\Validator\AbstractValidator;
 class UniqueValidator extends AbstractValidator
 {
 
-    protected string $message = 'Field :field must be unique';
+    protected string $message = 'Поле :field должно быть уникальным!';
 
     public function rule(): bool
     {

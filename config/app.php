@@ -11,10 +11,14 @@ return [
     ],
     'routeAppMiddleware' => [
         'trim' => \Middlewares\TrimMiddleware::class,
+        'csrf' => \Middlewares\CSRFMiddleware::class,
         'specialChars' => \Middlewares\SpecialCharsMiddleware::class,
     ],
     'validators' => [
         'required' => \Validators\RequireValidator::class,
-        'unique' => \Validators\UniqueValidator::class
+        'unique' => \Validators\UniqueValidator::class,
+        'select' => \Validators\SelectValidator::class,
+        'password' => \Validators\PasswordValidator::class,
+        'login' => \Validators\LoginValidator::class,
     ]
 ];

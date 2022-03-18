@@ -29,7 +29,7 @@ class Validator
     private function validate(): void
     {
         foreach ($this->rules as $fieldName => $fieldValidators) {
-            $this->validateField($fieldName, $fieldValidators);
+            @$this->validateField($fieldName, $fieldValidators);
         }
     }
 

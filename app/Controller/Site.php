@@ -32,19 +32,22 @@ class Site
     public function signup(Request $request): string
     {
         if ($request->method === "POST") {
-            $error = '';
             $post = $request->post;
             $states = State::all();
 
+            if ($post['password'] !== $post['password2']) return new View('site.signup', ['error' => 'Пароли не совпадают <br>', 'states' => $states]);
+
             $validator = new Validator($request->all(), [
                 'first_name' => ['required'],
-                'login' => ['required', 'unique:users,login'],
-                'password' => ['required'],
+                'login' => ['required', 'unique:users,login', 'login'],
+                'password' => ['required', 'password'],
                 'last_name' => ['required'],
                 'middle_name' => ['required'],
                 'post' => ['required'],
                 'birth_date' => ['required'],
-                'home_address' => ['required']
+                'home_address' => ['required'],
+                'state' => ['select'],
+                'gender' => ['select'],
             ], [
                 'required' => 'Поле :field пусто',
                 'unique' => 'Поле :field должно быть уникально'
@@ -53,16 +56,12 @@ class Site
             if ($validator->fails()) {
                 return new View(
                     'site.signup',
-                    ['error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]
+                    [
+                        'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                        'states' => $states
+                    ]
                 );
             }
-
-
-            if ($post['password'] !== $post['password2']) $error = $error . 'Пароли не совпадают <br>';
-            if ($post['state'] === 'fake') $error = $error . 'Выберите штат <br>';
-            if ($post['gender'] === 'fake') $error = $error . 'Выберите пол <br>';
-
-            if (!empty($error)) return new View('site.signup', ['error' => $error, 'states' => $states]);
 
             if (User::create($request->all())) {
                 app()->route->redirect('/hello');
@@ -159,21 +158,27 @@ class Site
     {
         $states = State::all();
         if ($request->method === "GET") return (new View)->render('site.create_new_user', ['states' => $states]);
-        $error = '';
         $post = $request->post;
         $states = State::all();
 
-        if ($post['state'] === 'fake') $error = $error . 'Выберите штат <br>';
-        if ($post['gender'] === 'fake') $error = $error . 'Выберите пол <br>';
+        $validator = new Validator($request->all(), [
+            'login' => ['unique:users,login']
+        ], [
+            'unique' => 'Поле :field должно быть уникально'
+        ]);
 
-        if (!empty($error)) return new View('site.create_new_user', ['error' => $error, 'states' => $states]);
+        if ($validator->fails()) {
+            return new View(
+                'site.create_new_user',
+                [
+                    'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                    'states' => $states
+                ]
+            );
+        }
 
-        try {
-            if (User::create($request->all())) {
-                return (new View)->render('site.create_new_user', ['states' => $states, 'error' => 'Успешно создан юзер с логином ' . $post['login']]);
-            }
-        } catch (QueryException $e) {
-            return new View('site.create_new_user', ['error' => 'Логин занят.', 'states' => $states]);
+        if (User::create($request->all())) {
+            return (new View)->render('site.create_new_user', ['states' => $states, 'error' => 'Успешно создан юзер с логином ' . $post['login']]);
         }
     }
 
@@ -183,15 +188,28 @@ class Site
         if ($request->method === "GET") return (new View)->render('site.create_new_state', ['divisions' => $divisions]);
 
         $post = $request->post;
-        $error = '';
 
         $divisionId = $post['division'];
         $allDivisionStates = State::where('division', $divisionId)->get();
 
-        if ($post['division'] === 'fake') $error = $error . 'Выберите подразделение';
+        $validator = new Validator($request->all(), [
+            'name' => ['required'],
+            'division' => ['select']
+        ], [
+            'required' => 'Поле :field обязательно'
+        ]);
 
-        if (!empty($error)) return new View('site.create_new_state', ['error' => $error, 'divisions' => $divisions]);
+        if ($validator->fails()) {
+            return new View(
+                'site.create_new_state',
+                [
+                    'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                    'divisions' => $divisions
+                ]
+            );
+        }
 
+        $error = '';
         foreach ($allDivisionStates as $state) {
             if ($state->name === $post['name']) {
                 $error = $error . "В подразделении уже есть штат с таким названием";
@@ -214,13 +232,26 @@ class Site
         $view = new View();
         if ($request->method === 'GET') return $view->render('site.create_new_division', ['companies' => $companies]);
 
-        $error = '';
         $post = $request->post;
 
-        if ($post['company'] === 'fake') $error = $error . 'Выберите компанию <br>';
+        $validator = new Validator($request->all(), [
+            'name' => ['required'],
+            'company' => ['select']
+        ], [
+            'required' => 'Поле :field обязательно'
+        ]);
 
-        if (!empty($error)) return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
+        if ($validator->fails()) {
+            return new View(
+                'site.create_new_division',
+                [
+                    'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                    'companies' => $companies
+                ]
+            );
+        }
 
+        $error = '';
         $divisionsWithSameName = Division::where(['name' => $post['name'], 'company' => $post['company']])->get();
         foreach ($divisionsWithSameName as $division) {
             if ($division->type === $post['type']) {
