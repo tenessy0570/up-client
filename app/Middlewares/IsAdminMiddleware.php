@@ -4,6 +4,7 @@ namespace Middlewares;
 
 use Src\Auth\Auth;
 use Src\Request;
+use Src\Settings;
 
 class IsAdminMiddleware
 {
@@ -11,15 +12,16 @@ class IsAdminMiddleware
     {
         // Перенаправляет на главную страницу, если не админ пытается выполнить админское действие
         $isAdmin = Auth::isAdmin();
-        $urlsForAdmin = [
-            '/createNewUser',
-            '/createNewState',
-            '/createNewDivision',
-            '/deleteUser',
-            '/deleteState',
-            '/deleteDivision'
-        ];
         $url = $request->url;
+
+        $allUris = Settings::getUris();
+        $urlsForAdmin = [];
+
+        foreach ($allUris as $uri) {
+            $explodedUri = explode('.', $uri);
+            if ($explodedUri[0] === 'admin') array_push($urlsForAdmin, $explodedUri[1]);
+        }
+
 
         if (in_array($url, $urlsForAdmin)) {
             if (!$isAdmin) {

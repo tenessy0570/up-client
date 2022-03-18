@@ -69,6 +69,11 @@ class Route
         return $this;
     }
 
+    public function save()
+    {
+        Settings::addUri($this->prefix . '.' . $this->currentRoute);
+    }
+    
     public function start(): void
     {
         // Fetch method and URI from somewhere

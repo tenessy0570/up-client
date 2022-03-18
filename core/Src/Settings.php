@@ -7,6 +7,7 @@ use Error;
 class Settings
 {
     private array $_settings;
+    private static array $uris = [];
 
     public function __construct(array $settings = [])
     {
@@ -33,5 +34,15 @@ class Settings
 
     public function getDbSetting(): array {
         return $this->db ?? [];
+    }
+
+    public static function addUri($uri)
+    {
+        array_push(Settings::$uris, $uri);
+    }
+
+    public static function getUris()
+    {
+        return Settings::$uris;
     }
 }
