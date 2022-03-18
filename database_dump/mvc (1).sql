@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 16 2022 г., 09:04
+-- Время создания: Мар 18 2022 г., 09:16
 -- Версия сервера: 10.4.22-MariaDB
 -- Версия PHP: 8.1.2
 
@@ -57,7 +57,9 @@ CREATE TABLE `divisions` (
 --
 
 INSERT INTO `divisions` (`id`, `name`, `type`, `company`) VALUES
-(1, 'division1', 'type1', 1);
+(3, '1', '1', 1),
+(5, 'FOR ADMINS', '2131', 1),
+(6, '2', 'weqewewq', 1);
 
 -- --------------------------------------------------------
 
@@ -96,7 +98,9 @@ CREATE TABLE `states` (
 --
 
 INSERT INTO `states` (`id`, `name`, `division`) VALUES
-(5, 'state1', 1);
+(8, 'state2', 3),
+(9, 'FOR ADMINS', 5),
+(10, '1', 3);
 
 -- --------------------------------------------------------
 
@@ -124,8 +128,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `middle_name`, `gender`, `birth_date`, `home_address`, `post`, `state`, `login`, `password`, `role`) VALUES
-(23, '1', '1', '1', 'Мужской', '2001-07-14', '1', '1', 5, '1', 'c81e728d9d4c2f636f067f89cc14862c', 'user'),
-(24, '2', '2', '2', 'Мужской', '1990-07-07', '213', '2', 5, '2', 'c81e728d9d4c2f636f067f89cc14862c', 'user');
+(33, '2', '2', '2', 'Женский', '2010-07-14', '2', '2', 8, '2', 'c81e728d9d4c2f636f067f89cc14862c', 'user'),
+(34, 'admin', 'admin', 'admin', 'Мужской', '1111-11-11', 'admin', 'admin', 9, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin'),
+(35, '1', '1', '1', 'Мужской', '2001-07-14', '1', '1', 10, '1', 'c4ca4238a0b923820dcc509a6f75849b', 'user');
 
 --
 -- Индексы сохранённых таблиц
@@ -180,7 +185,7 @@ ALTER TABLE `companies`
 -- AUTO_INCREMENT для таблицы `divisions`
 --
 ALTER TABLE `divisions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `posts`
@@ -192,13 +197,13 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT для таблицы `states`
 --
 ALTER TABLE `states`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
