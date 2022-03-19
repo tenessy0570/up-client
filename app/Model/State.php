@@ -14,4 +14,9 @@ class State extends Model{
         'name',
         'division'
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
