@@ -1,5 +1,6 @@
 <div class="staff-wrapper">
 <form method="POST">
+    <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
     <select name="id" id="" required> 
         <option value="fake">Название штата</option> <?php
 
