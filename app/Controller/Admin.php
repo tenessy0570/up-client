@@ -12,13 +12,18 @@ use Src\Validator\Validator;
 
 
 class Admin
-{
+{   
+    protected static $view;
+    public function __construct()
+    {
+        self::$view = new View();
+    }
+
     public function createNewUser(Request $request): string
     {
         $states = State::all();
         if ($request->method === "GET") return (new View)->render('site.create_new_user', ['states' => $states]);
         $post = $request->post;
-        $states = State::all();
 
         $validator = new Validator($request->all(), [
             'login' => ['unique:users,login'],
@@ -28,7 +33,7 @@ class Admin
         ]);
 
         if ($validator->fails()) {
-            return new View(
+            return self::$view->render(
                 'site.create_new_user',
                 [
                     'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
@@ -38,7 +43,7 @@ class Admin
         }
 
         if (User::create($request->all())) {
-            return (new View)->render('site.create_new_user', ['states' => $states, 'error' => 'Успешно создан юзер с логином ' . $post['login']]);
+            return self::$view->render('site.create_new_user', ['states' => $states, 'error' => 'Успешно создан юзер с логином ' . $post['login']]);
         }
     }
 
@@ -60,7 +65,7 @@ class Admin
         ]);
 
         if ($validator->fails()) {
-            return new View(
+            return self::$view->render(
                 'site.create_new_state',
                 [
                     'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
@@ -80,17 +85,16 @@ class Admin
         if (!empty($error)) return new View('site.create_new_state', ['error' => $error, 'divisions' => $divisions]);
 
         if (State::create($request->all())) {
-            return (new View)->render('site.create_new_state', ['error' => 'Штат успешно создан']);
+            return self::$view->render('site.create_new_state', ['error' => 'Штат успешно создан']);
         }
 
-        return (new View)->render('site.create_new_state', ['error' => 'Произошла ошибка']);
+        return self::$view->render('site.create_new_state', ['error' => 'Произошла ошибка']);
     }
 
     public function createNewDivision(Request $request)
     {
         $companies = Company::all();
-        $view = new View();
-        if ($request->method === 'GET') return $view->render('site.create_new_division', ['companies' => $companies]);
+        if ($request->method === 'GET') return self::$view->render('site.create_new_division', ['companies' => $companies]);
 
         $post = $request->post;
 
@@ -102,7 +106,7 @@ class Admin
         ]);
 
         if ($validator->fails()) {
-            return new View(
+            return self::$view->render(
                 'site.create_new_division',
                 [
                     'error' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
@@ -116,12 +120,12 @@ class Admin
         foreach ($divisionsWithSameName as $division) {
             if ($division->type === $post['type']) {
                 $error = $error . 'Подразделение такого типа уже существует в компании';
-                return $view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
+                return self::$view->render('site.create_new_division', ['companies' => $companies, 'error' => $error]);
             }
         }
 
         if (Division::create($request->all())) {
-            return $view->render('site.create_new_division', ['companies' => $companies, 'error' => 'Успешно создано']);
+            return self::$view->render('site.create_new_division', ['companies' => $companies, 'error' => 'Успешно создано']);
         } else {
             // handle error
         }
@@ -129,70 +133,53 @@ class Admin
 
     public function deleteUser(Request $request): string
     {
-        $users = User::all();
+        $users = User::where('id', '!=', $_SESSION['id'])->get();
 
-        // Убираем свой аккаунт из списка пользователей 
-        for ($i = 0; $i < count($users); $i += 1) {
-            if ($users[$i]->id == $_SESSION['id']) {
-                unset($users[$i]);
-                break;
-            }
-        }
-
-        $view = new View();
-        if ($request->method === 'GET') return $view->render('site.delete_user', ['users' => $users]);
+        if ($request->method === 'GET') return self::$view->render('site.delete_user', ['users' => $users]);
 
         $post = $request->post;
 
-        if ($post['id'] === 'fake') return $view->render('site.delete_user', ['users' => $users, 'message' => 'Выберите пользователя']);
+        if ($post['id'] === 'fake') return self::$view->render('site.delete_user', ['users' => $users, 'message' => 'Выберите пользователя']);
 
         $user = User::where('id', $post['id'])->first();
 
         if ($user->delete()) {
-            $users = User::all();
-            for ($i = 0; $i < count($users); $i += 1) {
-                if ($users[$i]->id == $_SESSION['id']) {
-                    unset($users[$i]);
-                    break;
-                }
-            }
-            return $view->render('site.delete_user', ['users' => $users, 'message' => 'Удалён успешно']);
+            $users = User::where('id', '!=', $_SESSION['id'])->get();
+            return self::$view->render('site.delete_user', ['users' => $users, 'message' => 'Удалён успешно']);
         }
     }
 
     public function deleteState(Request $request): string
     {
         $states = State::all();
-        $view = new View();
-        if ($request->method === 'GET') return $view->render('site.delete_state', ['states' => $states]);
+        if ($request->method === 'GET') return self::$view->render('site.delete_state', ['states' => $states]);
 
         $post = $request->post;
 
-        if ($post['id'] === 'fake') return $view->render('site.delete_state', ['states' => $states, 'message' => 'Выберите штат']);
+        if ($post['id'] === 'fake') return self::$view->render('site.delete_state', ['states' => $states, 'message' => 'Выберите штат']);
 
         $state = State::where('id', $post['id'])->first();
 
         if ($state->delete()) {
             $states = State::all();
-            return $view->render('site.delete_state', ['states' => $states, 'message' => 'Удалён успешно']);
+            return self::$view->render('site.delete_state', ['states' => $states, 'message' => 'Удалён успешно']);
         }
     }
 
     public function deleteDivision(Request $request): string
     {
         $divisions = Division::all();
-        $view = new View();
-        if ($request->method === 'GET') return $view->render('site.delete_division', ['divisions' => $divisions]);
+        if ($request->method === 'GET') return self::$view->render('site.delete_division', ['divisions' => $divisions]);
 
         $post = $request->post;
 
-        if ($post['id'] === 'fake') return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Выберите подразделение']);
+        if ($post['id'] === 'fake') return self::$view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Выберите подразделение']);
 
         $division = Division::where('id', $post['id'])->first();
 
         if ($division->delete()) {
             $divisions = Division::all();
-            return $view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Удалён успешно']);
+            return self::$view->render('site.delete_division', ['divisions' => $divisions, 'message' => 'Удалён успешно']);
         }
     }
 }
